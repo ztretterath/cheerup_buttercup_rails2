@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   def index
     users = User.all
+    # cheerups = CheerUp.all
     render json: users
   end
 
@@ -37,6 +38,35 @@ class UsersController < ApplicationController
 
     render json: {status: 204}
   end
+
+  def cheer_ups
+    cheerups = CheerUp.all
+    render json: cheerups
+  end
+
+  def add_cheer_up
+    user = User.includes(:cheer_ups).find(params[:id])
+    cheer_up = Song.find(params[:cheer_up_id])
+
+    render json:{
+      status: 200,
+      user: user,
+      cheer_up: user.cheer_ups
+    }
+  end
+
+  def remove_cheer_up
+    user = User.includes(:cheer_up).find(params[:id])
+    cheer_up = CheerUp.find(params[:cheer_up_id])
+    user.remove_cheer_up(cheer_up)
+
+    render json: {
+      status: 204,
+      user: user,
+      cheer_ups: user.cheer_ups
+    }
+  end
+
 
   private
 

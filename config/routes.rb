@@ -8,8 +8,6 @@ Rails.application.routes.draw do
     end
   end
 
-  # Check member do for user *********
-
   resources :cheer_ups, only: [:create, :show, :update, :index, :destroy]
 
   resources :users, only: [:create, :show, :update, :index, :destroy] do

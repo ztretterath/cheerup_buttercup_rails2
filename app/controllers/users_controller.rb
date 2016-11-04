@@ -7,7 +7,6 @@ class UsersController < ApplicationController
     render json: users
   end
 
-
   #POST/users
   def create
     user = User.new(user_params)
@@ -29,7 +28,6 @@ class UsersController < ApplicationController
       render json: {status: 401, message: "unauthorized"}
     end
   end
-
 
   # GET /users/1
   def show

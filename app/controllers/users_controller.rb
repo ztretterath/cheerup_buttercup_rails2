@@ -23,7 +23,7 @@ class UsersController < ApplicationController
 
     if user && user.authenticate(params[:user][:password])
       token = token(user.id, user.username) # Added this
-      render json: {status: 201, user: user, token: token}
+      render json: {status: 201, user: {id: user.id, username: user.username}, token: token}
     else
       render json: {status: 401, message: "unauthorized"}
     end

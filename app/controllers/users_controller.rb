@@ -70,6 +70,22 @@ class UsersController < ApplicationController
     }
   end
 
+  # Updates a user's single cheerup
+  def update_cheer_up
+    cheerup = CheerUp.find(params[:id])
+
+    cheerup.update(cheerup_params)
+  
+    render json: {status: 200, cheerup: cheerup}
+  end
+
+
+  def destroy
+    cheerup = CheerUp.destroy(params[:id])
+    render json: {status: 204}
+  end
+
+
   # Remove cheerups from user
   def remove_cheer_up
     user = User.includes(:cheer_up).find(params[:id])

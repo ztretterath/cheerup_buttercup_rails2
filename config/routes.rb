@@ -8,13 +8,13 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :cheer_ups, only: [:create, :show, :update, :index, :destroy]
+  resources :cheer_ups, only: [:show, :index]
 
   resources :users, only: [:create, :show, :update, :index, :destroy] do
     member do
       get '/cheer_ups', to: 'users#cheer_ups'
-      put '/add_cheer_up/:cheer_up_id', to: 'users#add_cheer_up'
-      put 'remove_cheer_up/:cheer_up_id', to: 'users#remove_cheer_up'
+      post '/add_cheer_up', to: 'users#add_cheer_up'
+      delete 'remove_cheer_up/:cheer_up_id', to: 'users#remove_cheer_up'
     end
   end
 

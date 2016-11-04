@@ -1,9 +1,9 @@
 class UsersController < ApplicationController
   before_action :authenticate, except: [:login, :create]
 
-  #####################
-  ##  /users routes  ##
-  #####################
+  ####################################
+  ##          /users routes         ##
+  ####################################
 
   def index
     users = User.all
@@ -63,16 +63,11 @@ class UsersController < ApplicationController
     render json: {status: 204}
   end
 
-  def cheer_ups
-    cheer_ups = CheerUp.all
-    render json: cheer_ups
-  end
+  ####################################
+  ##    /users/cheer_ups routes     ##
+  ####################################
 
-  #############################
-  ## /users/cheer_ups routes ##
-  #############################
-
-  # Add cheer_ups to user
+  # Adds a cheer_up to a user
   def add_cheer_up
     user = User.find(params[:id])
     user.cheer_ups.create(cheer_up_params)
@@ -98,7 +93,7 @@ class UsersController < ApplicationController
     } # end render json
   end
 
-  # Remove cheer_ups from user
+  # Remove a cheer_up from a user
   def remove_cheer_up
     user = User.find(params[:id])
     cheer_up = CheerUp.find(params[:cheer_up_id])
@@ -115,7 +110,6 @@ class UsersController < ApplicationController
   private
 
     def token(id, username)
-      # binding.pry
       JWT.encode(payload(id, username), ENV['JWT_SECRET'], 'HS256')
     end
 

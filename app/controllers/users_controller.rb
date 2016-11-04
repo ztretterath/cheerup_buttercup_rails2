@@ -1,15 +1,12 @@
 class UsersController < ApplicationController
+  before_action :authenticate, except: [:login, :create]
+
   def index
     users = User.all
     # cheerups = CheerUp.all
     render json: users
   end
 
-  # GET /users/1
-  def show
-    user = User.find(params[:id])
-    render json: user
-  end
 
   #POST/users
   def create
@@ -19,6 +16,25 @@ class UsersController < ApplicationController
     else
       render json: user.errors, status: :unprocessable_entity
     end
+  end
+
+  # User authentication
+  def login
+    user = User.find_by(username: params[:user][:username])
+
+    if user && user.authenticate(params[:user][:password])
+      token = token(user.id, user.username) # Added this
+      render json: {status: 201, user: user, token: token}
+    else
+      render json: {status: 401, message: "unauthorized"}
+    end
+  end
+
+
+  # GET /users/1
+  def show
+    user = User.find(params[:id])
+    render json: user
   end
 
   # PATCH/PUT /users/1
@@ -44,6 +60,7 @@ class UsersController < ApplicationController
     render json: cheerups
   end
 
+  # Add cheerups to user
   def add_cheer_up
     user = User.includes(:cheer_ups).find(params[:id])
     cheer_up = Song.find(params[:cheer_up_id])
@@ -55,6 +72,7 @@ class UsersController < ApplicationController
     }
   end
 
+  # Remove cheerups from user
   def remove_cheer_up
     user = User.includes(:cheer_up).find(params[:id])
     cheer_up = CheerUp.find(params[:cheer_up_id])
@@ -67,8 +85,24 @@ class UsersController < ApplicationController
     }
   end
 
-
   private
+
+    def token(id, username)
+      # binding.pry
+      JWT.encode(payload(id, username), ENV['JWT_SECRET'], 'HS256')
+    end
+
+    def payload(id, username)
+      {
+        exp: (Time.now + 1.day).to_i, # Expiration date 24 hours from now
+        iat: Time.now.to_i,
+        iss: ENV['JWT_ISSUER'],
+        user: {
+          id: id,
+          username: username
+        }
+      }
+    end
 
     def user_params
       params.require(:user).permit(:last_name, :first_name, :username, :password, :email)

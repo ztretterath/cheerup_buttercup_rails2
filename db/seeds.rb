@@ -16,3 +16,7 @@ end
 10.times do
   CheerUp.create(title: Faker::Hipster.sentence(1), content: Faker::Hipster.sentence(7), category: Faker::Beer.malts, user_id: Random.new.rand(10))
 end
+
+10.times do
+  Review.create(user_id: Random.new.rand(10), cheer_up_id: Random.new.rand(10), value: Random.new.rand(10))
+end

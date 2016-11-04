@@ -95,12 +95,13 @@ class UsersController < ApplicationController
   # Remove cheer_ups from user
   def remove_cheer_up
     user = User.find(params[:id])
-    user.remove_cheer_up(cheer_up)
-
+    cheer_up = CheerUp.find(params[:cheer_up_id])
+    cheer_up.destroy
     render json: {
       status: 204,
       user: user,
-      cheer_ups: user.cheer_ups
+      cheer_ups: user.cheer_ups,
+      deleted_cheer_up: cheer_up
     }
   end
 
@@ -128,6 +129,6 @@ class UsersController < ApplicationController
     end
 
     def cheer_up_params
-        params.require(:cheer_up).permit(:title, :content, :category)
+        params.require(:cheer_up).permit(:title, :content, :category, :user_id)
     end
 end

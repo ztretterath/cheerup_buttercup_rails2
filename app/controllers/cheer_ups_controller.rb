@@ -14,19 +14,30 @@ class CheerUpsController < ApplicationController
   # Adds a review to a cheerup
   def add_review
     cheer_up = CheerUp.find(params[:id])
-    cheer_up.reviews.create(review_params)
-
-    render json:{
-      status: 200,
-      cheer_up: cheer_up,
-      review: cheer_up.reviews
-    }
+    review = cheer_up.reviews.new(review_params)
+    # review = cheer_up.reviews.create(review_params)
+    review.user_id = current_user.id
+    if review.save
+      render json:
+      {
+        status: 200,
+        cheer_up: cheer_up,
+        review: cheer_up.reviews
+      }
+    else
+      render json:
+      {
+        status: 400,
+        cheer_up: cheer_up,
+        review: review.errors
+      }
+    end
   end
 
   # Updates a cheerup review
 
   def update_review
-    review = Review.find(params[:id])
+    review = Review.find(params[:review][:id]) # NOTE: id DOES NOT EXIST
 
     review.update(review_params)
 

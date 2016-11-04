@@ -61,7 +61,7 @@ class UsersController < ApplicationController
   # Add cheerups to user
   def add_cheer_up
     user = User.includes(:cheer_ups).find(params[:id])
-    cheer_up = Song.find(params[:cheer_up_id])
+    cheer_up = CheerUp.find(params[:cheer_up_id])
 
     render json:{
       status: 200,

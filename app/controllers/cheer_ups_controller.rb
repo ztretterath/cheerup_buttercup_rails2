@@ -37,7 +37,10 @@ class CheerUpsController < ApplicationController
   # Updates a cheerup review
 
   def update_review
-    review = Review.find(params[:review][:id]) # NOTE: id DOES NOT EXIST
+    # NOTE: This method needs to find the cheer_up whose id == params[:id], then
+    # update the review for that cheer_up since reviews don't exist apart from
+    # cheer_ups
+    review = Review.find(params[:id])
 
     review.update(review_params)
 

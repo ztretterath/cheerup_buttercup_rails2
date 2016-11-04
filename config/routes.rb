@@ -15,7 +15,7 @@ Rails.application.routes.draw do
   resources :cheer_ups, only: [:show, :index] do
     member do
       post '/add_review', to: 'cheer_ups#add_review'
-      put '/update_review', to: 'cheer_ups#update_review'
+      patch '/update_review', to: 'cheer_ups#update_review'
     end
   end
 

@@ -14,6 +14,7 @@ Rails.application.routes.draw do
     member do
       get '/cheer_ups', to: 'users#cheer_ups'
       post '/add_cheer_up', to: 'users#add_cheer_up'
+      patch '/update_cheer_up/:cheer_up_id', to: 'users#update_cheer_up'
       delete 'remove_cheer_up/:cheer_up_id', to: 'users#remove_cheer_up'
     end
   end

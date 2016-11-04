@@ -1,6 +1,10 @@
 class UsersController < ApplicationController
   before_action :authenticate, except: [:login, :create]
 
+  #####################
+  ##  /users routes  ##
+  #####################
+
   def index
     users = User.all
     # cheer_ups = CheerUp.all
@@ -64,6 +68,10 @@ class UsersController < ApplicationController
     render json: cheer_ups
   end
 
+  #############################
+  ## /users/cheer_ups routes ##
+  #############################
+
   # Add cheer_ups to user
   def add_cheer_up
     user = User.find(params[:id])
@@ -78,31 +86,30 @@ class UsersController < ApplicationController
 
   # Updates a user's single cheer_up
   def update_cheer_up
-    cheer_up = CheerUp.find(params[:id])
-
-    cheer_up.update(cheer_up_params)
-
-    render json: {status: 200, cheer_up: cheer_up}
+    user = User.find(params[:id])
+    updating_cheer_up = CheerUp.find(params[:cheer_up_id])
+    updating_cheer_up.update(cheer_up_params)
+    render json:
+    {
+      status: 200,
+      user: user,
+      cheer_ups: user.cheer_ups,
+      updated_cheer_up: updating_cheer_up
+    } # end render json
   end
-
-
-  # def destroy
-  #   cheer_up = CheerUp.destroy(params[:id])
-  #   render json: {status: 204}
-  # end
-
 
   # Remove cheer_ups from user
   def remove_cheer_up
     user = User.find(params[:id])
     cheer_up = CheerUp.find(params[:cheer_up_id])
     cheer_up.destroy
-    render json: {
+    render json:
+    {
       status: 204,
       user: user,
       cheer_ups: user.cheer_ups,
       deleted_cheer_up: cheer_up
-    }
+    } # end render json
   end
 
   private

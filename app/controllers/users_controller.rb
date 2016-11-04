@@ -32,7 +32,13 @@ class UsersController < ApplicationController
   # GET /users/1
   def show
     user = User.find(params[:id])
-    render json: user
+    user_cheer_ups = user.cheer_ups
+    render json:
+    {
+      status: 200,
+      user: user,
+      user_cheer_ups: user_cheer_ups
+    }
   end
 
   # PATCH/PUT /users/1
@@ -60,8 +66,9 @@ class UsersController < ApplicationController
 
   # Add cheerups to user
   def add_cheer_up
-    user = User.includes(:cheer_ups).find(params[:id])
-    cheer_up = CheerUp.find(params[:cheer_up_id])
+    user = User.find(params[:id])
+    # cheer_up = CheerUp.find(params[:cheer_up_id])
+    user.cheer_ups.create(cheerup_params)
 
     render json:{
       status: 200,
@@ -75,7 +82,7 @@ class UsersController < ApplicationController
     cheerup = CheerUp.find(params[:id])
 
     cheerup.update(cheerup_params)
-  
+
     render json: {status: 200, cheerup: cheerup}
   end
 
@@ -120,5 +127,9 @@ class UsersController < ApplicationController
 
     def user_params
       params.require(:user).permit(:last_name, :first_name, :username, :password, :email)
+    end
+
+    def cheerup_params
+        params.require(:cheerup).permit(:title, :content, :category)
     end
 end

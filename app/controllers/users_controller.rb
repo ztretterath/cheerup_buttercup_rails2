@@ -69,14 +69,22 @@ class UsersController < ApplicationController
 
   # Adds a cheer_up to a user
   def add_cheer_up
-    user = User.find(params[:id])
-    user.cheer_ups.create(cheer_up_params)
-
-    render json:{
-      status: 200,
-      user: user,
-      cheer_up: user.cheer_ups
-    }
+    new_cheer_up = currentUser.cheer_ups.new(cheer_up_params)
+    if new_cheer_up.save
+      render json:
+      {
+        status: 200,
+        user: currentUser,
+        cheer_up: user.cheer_ups
+      }
+    else
+      render json:
+      {
+        status: 400,
+        user: currentUser,
+        cheer_up: cheer_up.errors
+      }
+    end
   end
 
   # Updates a user's single cheer_up

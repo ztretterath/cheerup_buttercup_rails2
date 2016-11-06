@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  resources :reviews, only: [:update]
+
   resources :users, only: [:create, :show, :update, :index, :destroy] do
     collection do
       post '/login', to: 'users#login'
@@ -15,7 +17,6 @@ Rails.application.routes.draw do
   resources :cheer_ups, only: [:show, :index] do
     member do
       post '/add_review', to: 'cheer_ups#add_review'
-      patch '/update_review', to: 'cheer_ups#update_review'
     end
   end
 

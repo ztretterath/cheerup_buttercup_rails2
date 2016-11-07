@@ -14,9 +14,6 @@ gem 'puma', '~> 3.0'
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 
-gem 'jwt'
-gem 'dotenv-rails', '~> 2.1', '>= 2.1.1'
-
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
@@ -26,8 +23,7 @@ gem 'faker'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  # gem 'byebug', platform: :mri
-  gem 'pry-rails'
+  gem 'byebug', platform: :mri
 end
 
 group :development do

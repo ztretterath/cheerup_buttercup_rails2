@@ -115,6 +115,11 @@ class UsersController < ApplicationController
     } # end render json
   end
 
+  def cheerups
+    user = User.find(params[:id])
+    return user.cheer_ups
+  end
+
   private
 
     def token(id, username)

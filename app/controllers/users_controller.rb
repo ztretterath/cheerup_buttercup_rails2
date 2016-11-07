@@ -1,9 +1,14 @@
 class UsersController < ApplicationController
   before_action :authenticate, except: [:login, :create]
+  # before_action :set_user, only: [:update]
 
   ####################################
   ##          /users routes         ##
   ####################################
+
+  # def set_user
+  #   @user = User.find(params[:id])
+  # end # set user before updating
 
   def index
     users = User.all
@@ -45,8 +50,15 @@ class UsersController < ApplicationController
     }
   end
 
-  # PATCH/PUT /users/1
-  def update
+  # # PATCH/PUT /users/1
+  # def update #Zach's attempt for front end updating
+  #   if @user.update(pass_params)
+  #     render json: {status: 200, user: @user}
+  #   else
+  #     render json: {status 204, message: @user.errors}
+  #   end
+  # end
+  # def update
     user = User.find(params[:id])
     if user.update(user_params)
       render json: user

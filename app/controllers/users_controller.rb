@@ -1,6 +1,10 @@
 class UsersController < ApplicationController
   before_action :authenticate, except: [:login, :create]
 
+  ####################################
+  ##          /users routes         ##
+  ####################################
+
   def index
     users = User.all
     # cheer_ups = CheerUp.all
@@ -59,56 +63,61 @@ class UsersController < ApplicationController
     render json: {status: 204}
   end
 
-  def cheer_ups
-    cheer_ups = CheerUp.all
-    render json: cheer_ups
-  end
+  ####################################
+  ##    /users/cheer_ups routes     ##
+  ####################################
 
-  # Add cheer_ups to user
+  # Adds a cheer_up to a user
   def add_cheer_up
-    user = User.find(params[:id])
-    user.cheer_ups.create(cheer_up_params)
-
-    render json:{
-      status: 200,
-      user: user,
-      cheer_up: user.cheer_ups
-    }
+    new_cheer_up = currentUser.cheer_ups.new(cheer_up_params)
+    if new_cheer_up.save
+      render json:
+      {
+        status: 200,
+        user: currentUser,
+        cheer_up: user.cheer_ups
+      }
+    else
+      render json:
+      {
+        status: 400,
+        user: currentUser,
+        cheer_up: cheer_up.errors
+      }
+    end
   end
 
   # Updates a user's single cheer_up
   def update_cheer_up
-    cheer_up = CheerUp.find(params[:id])
-
-    cheer_up.update(cheer_up_params)
-
-    render json: {status: 200, cheer_up: cheer_up}
+    user = User.find(params[:id])
+    updating_cheer_up = CheerUp.find(params[:cheer_up_id])
+    updating_cheer_up.update(cheer_up_params)
+    render json:
+    {
+      status: 200,
+      user: user,
+      cheer_ups: user.cheer_ups,
+      updated_cheer_up: updating_cheer_up
+    } # end render json
   end
 
-
-  # def destroy
-  #   cheer_up = CheerUp.destroy(params[:id])
-  #   render json: {status: 204}
-  # end
-
-
-  # Remove cheer_ups from user
+  # Remove a cheer_up from a user
   def remove_cheer_up
     user = User.find(params[:id])
     cheer_up = CheerUp.find(params[:cheer_up_id])
     cheer_up.destroy
-    render json: {
+    render json:
+    {
       status: 204,
       user: user,
       cheer_ups: user.cheer_ups,
       deleted_cheer_up: cheer_up
-    }
+    } # end render json
   end
 
   private
 
     def token(id, username)
-      # binding.pry
       JWT.encode(payload(id, username), ENV['JWT_SECRET'], 'HS256')
     end
 

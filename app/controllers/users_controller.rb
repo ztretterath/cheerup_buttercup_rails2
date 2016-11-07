@@ -141,3 +141,6 @@ class UsersController < ApplicationController
         params.require(:cheer_up).permit(:title, :content, :category, :user_id)
     end
 end
+
+
+# Erase me please
